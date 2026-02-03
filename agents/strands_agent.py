@@ -4,10 +4,10 @@ using the Strands framework.
 """
 
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
-from strands import Agent
+from strands import Agent, tool
 from strands.models import BedrockModel
 from strands_tools import calculator
-
+import requests
 # Initialize the Bedrock AgentCore application
 app = BedrockAgentCoreApp()
 
@@ -31,10 +31,35 @@ except FileNotFoundError:
 
 model = BedrockModel(model_id=model_id, guardrail=guardrail_config)
 
+
+API_BASE = "https://fbmncazxh4.execute-api.us-east-1.amazonaws.com/dev"
+
+@tool(
+    name="auth_init",
+    description="Initiate authentication by sending OTP to user's email using phone number"
+)
+def auth_init(phone: str) -> dict:
+    """
+    Calls API Gateway /auth endpoint to generate and send OTP.
+    """
+    url = f"{API_BASE}/auth"
+    payload = {
+        "phone": phone
+    }
+
+    try:
+        r = requests.post(url, json=payload, timeout=10)
+        r.raise_for_status()
+        return r.json()
+    except Exception as e:
+        return {
+            "status": "ERROR",
+            "message": f"auth_init failed: {str(e)}"
+        }
 # Create the agent with tools and system prompt
 agent = Agent(
     model=model,
-    tools=[calculator],
+    tools=[calculator, auth_init],
     system_prompt="You're a helpful assistant. You can do simple math calculation.",
 )
 

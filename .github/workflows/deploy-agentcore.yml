@@ -2,6 +2,9 @@ name: Deploy Strand Agent to Bedrock AgentCore Runtime
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   AWS_REGION: us-east-1
