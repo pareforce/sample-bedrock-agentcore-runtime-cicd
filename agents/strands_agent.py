@@ -38,7 +38,9 @@ API_BASE = "https://fbmncazxh4.execute-api.us-east-1.amazonaws.com/dev"
 
 @tool(
     name="auth_init",
-    description="Initiate authentication by sending OTP to user's email using phone number",
+    description=(
+        "Initiate authentication by sending OTP to user's email using phone number"
+    ),
 )
 def auth_init(phone: str) -> dict:
     """
