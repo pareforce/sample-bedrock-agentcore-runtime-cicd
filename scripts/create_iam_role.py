@@ -103,10 +103,7 @@ def create_or_update_role(agent_name: str, region: str) -> str:
                     "bedrock:ConverseStream",                 # Streaming converse API
                     "bedrock:CreateGuardrail",                # Create guardrails
                     "bedrock:CreateGuardrailVersion",         # Create guardrail versions
-                    "bedrock:GetGuardrail",                   # Get guardrail details
-                    "bedrock:ListGuardrails",                 # List available guardrails
-                    "bedrock-agentcore:ListAgentRuntimes",         # List agent runtimes
-                    "bedrock-agentcore:ListAgentRuntimeVersions",  # List runtime versions
+                    "bedrock:GetGuardrail",                   # Get guardrail details          
                     "bedrock-agentcore:DeleteAgentRuntimeVersion"   # Delete runtime versions
                 ],
                 "Resource": [
@@ -120,6 +117,17 @@ def create_or_update_role(agent_name: str, region: str) -> str:
                     "arn:aws:bedrock:*:*:inference-profile/anthropic.claude-*"
                 ]
             },
+            {
+                # Bedrock List permissions
+                "Effect": "Allow",
+                "Action": [
+                    "bedrock:ListGuardrails",     # List available guardrails
+                    "bedrock:ListFoundationModels", # List available foundation models
+                    "bedrock-agentcore:ListAgentRuntimes", # List available agent runtimes
+                    "bedrock-agentcore:ListAgentRuntimeVersions" # List available agent runtime versions
+                ],
+                "Resource": "*"
+                },
             {
                 # ECR permissions for container image access
                 "Effect": "Allow",

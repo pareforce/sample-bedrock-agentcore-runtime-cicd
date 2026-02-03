@@ -52,7 +52,7 @@ def create_oidc_provider(iam_client):
         SystemExit: If provider creation fails
     """
     # GitHub OIDC provider configuration
-    github_url = "https://token.actions.githubusercontent.com"
+    github_url = "token.actions.githubusercontent.com"
     # GitHub's root CA thumbprint (required for OIDC trust)
     thumbprint = ["6938fd4d98bab03faadb97b34396831e3780aea1", "1c58a3a8518e8759bf075b76b750d4f2df264fcd"]
     
@@ -60,6 +60,7 @@ def create_oidc_provider(iam_client):
         # Check if GitHub OIDC provider already exists
         providers = iam_client.list_open_id_connect_providers()
         for provider in providers["OpenIDConnectProviderList"]:
+            print(provider["Arn"])
             if github_url in provider["Arn"]:
                 logger.info(f"GitHub OIDC provider already exists: {provider['Arn']}")
                 return provider["Arn"]
@@ -68,7 +69,7 @@ def create_oidc_provider(iam_client):
         logger.info("Creating GitHub OIDC identity provider...")
         response = iam_client.create_open_id_connect_provider(
             Url=github_url,                    # GitHub's OIDC endpoint
-            ThumbprintList=[thumbprint],        # GitHub's certificate thumbprint
+            ThumbprintList=thumbprint,        # GitHub's certificate thumbprint
             ClientIDList=["sts.amazonaws.com"] # AWS STS as the audience
         )
         logger.info(f"Created OIDC provider: {response['OpenIDConnectProviderArn']}")
