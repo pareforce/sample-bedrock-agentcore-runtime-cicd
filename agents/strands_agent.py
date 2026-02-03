@@ -3,11 +3,11 @@ This module defines a conversational AI agent that can perform calculations
 using the Strands framework.
 """
 
+import requests
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
 from strands import Agent, tool
 from strands.models import BedrockModel
 from strands_tools import calculator
-import requests
 
 # Initialize the Bedrock AgentCore application
 app = BedrockAgentCoreApp()
